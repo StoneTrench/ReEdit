@@ -1,0 +1,14 @@
+reworldedit.command.error.args=Invalid arguments
+
+reworldedit.command.copy.completed=Copied %1$s blocks to clipboard
+reworldedit.command.paste.completed=Pasted %1$s blocks to clipboard
+
+reworldedit.command.redo.completed.multiple=Redid %1$s operations
+reworldedit.command.redo.completed=Redid 1 operation
+reworldedit.command.redo.failed=Nothing to redo
+
+reworldedit.command.undo.completed.multiple="Undid %1$s operations
+reworldedit.command.undo.completed=Undid 1 operation
+reworldedit.command.undo.failed=Nothing to undo
+
+reworldedit.command.stack.completed=Stacked %1$s blocks in direction %2$s

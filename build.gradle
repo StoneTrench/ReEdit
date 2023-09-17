@@ -1,0 +1,43 @@
+buildscript {
+	repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io/' }
+        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+        maven { url 'https://repo.spongepowered.org/maven' }
+        maven {
+            name = "Modrinth"
+            url = "https://api.modrinth.com/maven"
+            content {
+                includeGroup "maven.modrinth"
+            }
+        }
+    }
+    dependencies {
+        classpath 'com.github.Fox2Code.FoxLoader:dev:1.2.12'
+    }
+}
+
+apply plugin: 'foxloader.dev'
+
+dependencies {
+    implementation "org.spongepowered:mixin:0.8.2"
+
+    compileOnly 'maven.modrinth:spark:1.10.53-fabric'
+    compileOnly 'net.silveros:reindev-server:2.8.1_4-rfl_1.2.12'
+    compileOnly 'com.github.Fox2Code.FoxLoader:client:1.2.12'
+}
+
+foxloader {
+    // forceReload = true
+    modId = project.id
+    modName = project.name
+    modVersion = project.version
+    modDesc = project.desc
+    clientMod = "me.${project.author}.${project.id}.ModClient"
+    serverMod = "me.${project.author}.${project.id}.ModServer"
+
+    // Development tools don't like that both client and server define
+    // the same classes, so uncomment to disable the side inclusion.
+    // includeClient = false
+    // includeServer = false
+}
