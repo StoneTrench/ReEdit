@@ -23,13 +23,13 @@ public class RedoCommand extends CommandCompat {
         if (args.length == 2) {
             int counter = 0;
             for (int i = 0; i < Integer.parseInt(args[1]); i++) {
-                if (BlockSetHistory.RedoPreviousChanges(world)) counter++;
+                if (BlockSetHistory.RedoPreviousChanges(commandExecutor, world)) counter++;
                 else break;
             }
             commandExecutor.displayChatMessage(
                     gameRegistry.translateKeyFormat("reworldedit.command.redo.completed.multiple", counter + ""));
         } else {
-            if (BlockSetHistory.RedoPreviousChanges(world))
+            if (BlockSetHistory.RedoPreviousChanges(commandExecutor, world))
                 commandExecutor.displayChatMessage(
                         gameRegistry.translateKey("reworldedit.command.redo.completed"));
             else

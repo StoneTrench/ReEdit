@@ -26,9 +26,9 @@ public class PasteSelection extends CommandCompat {
         WEVector3I playerPos = new WEVector3I(commandExecutor.getRegisteredX(), commandExecutor.getRegisteredY(), commandExecutor.getRegisteredZ());
         final RegisteredWorld world = commandExecutor.getCurrentRegisteredWorld();
 
-        ArrayList<WEBlockData> blocks = BlocksClipboard.GetClipboard(playerPos);
+        ArrayList<WEBlockData> blocks = BlocksClipboard.GetClipboard(commandExecutor, playerPos);
 
-        BlockSetHistory.ApplyBlockChanges(blocks, world);
+        BlockSetHistory.ApplyBlockChanges(commandExecutor, blocks, world);
 
         commandExecutor.displayChatMessage(
                 gameRegistry.translateKeyFormat("reworldedit.command.paste.completed", blocks.size() + ""));

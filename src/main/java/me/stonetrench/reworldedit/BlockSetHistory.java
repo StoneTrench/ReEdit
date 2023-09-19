@@ -1,15 +1,17 @@
 package me.stonetrench.reworldedit;
 
+import com.fox2code.foxloader.network.NetworkPlayer;
 import com.fox2code.foxloader.registry.RegisteredWorld;
 
 import java.util.ArrayList;
 
 public class BlockSetHistory {
-    private static final ArrayList<ArrayList<WEBlockData>> PreviousBlocks = new ArrayList<>();
-    private static ArrayList<ArrayList<WEBlockData>> UndidBlocks = new ArrayList<>();
 
-    public static void ApplyBlockChanges(ArrayList<WEBlockData> changes, RegisteredWorld world) {
-        UndidBlocks = new ArrayList<>();
+    private static final PerPlayerDataHandling<ArrayList<ArrayList<WEBlockData>>> PlayerPreviousBlocks = new PerPlayerDataHandling<>();
+    private static final PerPlayerDataHandling<ArrayList<ArrayList<WEBlockData>>> PlayerUndidBlocks = new PerPlayerDataHandling<>();
+
+    public static void ApplyBlockChanges(NetworkPlayer player, ArrayList<WEBlockData> changes, RegisteredWorld world) {
+        PlayerUndidBlocks.GetPlayerData(player, new ArrayList<>()).clear();
 
         ArrayList<WEBlockData> result = new ArrayList<>();
 
@@ -18,15 +20,19 @@ public class BlockSetHistory {
         for (WEBlockData block : changes)
             world.setRegisteredBlockAndMetadataWithNotify(block.position.X, block.position.Y, block.position.Z, block.Id, block.Meta);
 
-        PreviousBlocks.add(result);
+        ArrayList<ArrayList<WEBlockData>> prevs = PlayerPreviousBlocks.GetPlayerData(player, new ArrayList<>());
 
-        if (PreviousBlocks.size() > 16)
-            PreviousBlocks.remove(0);
+        prevs.add(result);
+
+        if (prevs.size() > 16)
+            prevs.remove(0);
     }
 
-    public static boolean UndoPreviousChanges(RegisteredWorld world){
-        if (PreviousBlocks.size() == 0) return false;
-        ArrayList<WEBlockData> changes = PreviousBlocks.remove(PreviousBlocks.size() - 1);
+    public static boolean UndoPreviousChanges(NetworkPlayer player, RegisteredWorld world){
+        ArrayList<ArrayList<WEBlockData>> prevs = PlayerPreviousBlocks.GetPlayerData(player, new ArrayList<>());
+
+        if (prevs.size() == 0) return false;
+        ArrayList<WEBlockData> changes = prevs.remove(prevs.size() - 1);
         ArrayList<WEBlockData> result = new ArrayList<>();
 
         for (WEBlockData block : changes)
@@ -34,12 +40,14 @@ public class BlockSetHistory {
         for (WEBlockData block : changes)
             world.setRegisteredBlockAndMetadataWithNotify(block.position.X, block.position.Y, block.position.Z, block.Id, block.Meta);
 
-        UndidBlocks.add(result);
+        PlayerUndidBlocks.GetPlayerData(player, new ArrayList<>()).add(result);
         return true;
     }
-    public static boolean RedoPreviousChanges(RegisteredWorld world) {
-        if (UndidBlocks.size() == 0) return false;
-        ArrayList<WEBlockData> changes = UndidBlocks.remove(UndidBlocks.size() - 1);
+    public static boolean RedoPreviousChanges(NetworkPlayer player, RegisteredWorld world) {
+        ArrayList<ArrayList<WEBlockData>> undid = PlayerUndidBlocks.GetPlayerData(player, new ArrayList<>());
+
+        if (undid.size() == 0) return false;
+        ArrayList<WEBlockData> changes = undid.remove(undid.size() - 1);
         ArrayList<WEBlockData> result = new ArrayList<>();
 
         for (WEBlockData block : changes)
@@ -47,10 +55,7 @@ public class BlockSetHistory {
         for (WEBlockData block : changes)
             world.setRegisteredBlockAndMetadataWithNotify(block.position.X, block.position.Y, block.position.Z, block.Id, block.Meta);
 
-        PreviousBlocks.add(result);
-
-        if (PreviousBlocks.size() > 16)
-            PreviousBlocks.remove(0);
+        PlayerPreviousBlocks.GetPlayerData(player, new ArrayList<>()).add(result);
         return true;
     }
 }

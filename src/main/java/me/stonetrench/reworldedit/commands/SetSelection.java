@@ -79,7 +79,7 @@ public class SetSelection extends CommandCompat{
             }
         }
 
-        BlockSetHistory.ApplyBlockChanges(blocks, world);
+        BlockSetHistory.ApplyBlockChanges(commandExecutor, blocks, world);
 
         commandExecutor.displayChatMessage(gameRegistry.translateKey("command.done"));
     }

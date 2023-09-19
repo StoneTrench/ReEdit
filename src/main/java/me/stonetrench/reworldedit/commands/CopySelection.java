@@ -37,7 +37,7 @@ public class CopySelection extends CommandCompat {
 
         ArrayList<WEBlockData> blocks = WorldEditHelper.ScanVolume(networkPlayerController, world);
 
-        BlocksClipboard.SetClipboard(blocks, playerPos);
+        BlocksClipboard.SetClipboard(commandExecutor, blocks, playerPos);
 
         commandExecutor.displayChatMessage(
                 gameRegistry.translateKeyFormat("reworldedit.command.copy.completed", blocks.size() + ""));

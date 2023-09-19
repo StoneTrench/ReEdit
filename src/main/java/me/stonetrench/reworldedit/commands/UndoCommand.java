@@ -24,13 +24,13 @@ public class UndoCommand extends CommandCompat {
         if (args.length == 2) {
             int counter = 0;
             for (int i = 0; i < Integer.parseInt(args[1]); i++) {
-                if (BlockSetHistory.UndoPreviousChanges(world)) counter++;
+                if (BlockSetHistory.UndoPreviousChanges(commandExecutor, world)) counter++;
                 else break;
             }
             commandExecutor.displayChatMessage(
                     gameRegistry.translateKeyFormat("reworldedit.command.undo.completed.multiple", counter + ""));
         } else {
-            if (BlockSetHistory.UndoPreviousChanges(world))
+            if (BlockSetHistory.UndoPreviousChanges(commandExecutor, world))
                 commandExecutor.displayChatMessage(
                         gameRegistry.translateKey("reworldedit.command.undo.completed"));
             else

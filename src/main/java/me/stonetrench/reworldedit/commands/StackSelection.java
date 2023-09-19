@@ -68,7 +68,7 @@ public class StackSelection extends CommandCompat {
             }
         }
 
-        BlockSetHistory.ApplyBlockChanges(allBlocks, world);
+        BlockSetHistory.ApplyBlockChanges(commandExecutor, allBlocks, world);
 
         commandExecutor.displayChatMessage(
                 gameRegistry.translateKeyFormat("reworldedit.command.stack.completed", (blocks.size() * count) + "", cardinalDirection + ""));
